@@ -10,8 +10,10 @@
 #include "Physics/ABCollision.h"
 #include "Engine/DamageEvents.h"
 #include "CharacterStat/ABCharacterStatComponent.h"
+#include "CharacterStat/ABCharacterInvenComponent.h"
 #include "UI/ABWidgetComponent.h"
 #include "UI/ABHpBarWidget.h"
+#include "UI/ABInventoryWidget.h"
 #include "Item/ABItems.h"
 
 DEFINE_LOG_CATEGORY(LogABCharacter);
@@ -41,7 +43,7 @@ AABCharacterBase::AABCharacterBase()
     GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
     GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> CharacterMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard'"));
+    static ConstructorHelpers::FObjectFinder<USkeletalMesh> CharacterMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Robo.SK_CharM_Robo'"));
     if (CharacterMeshRef.Object)
     {
         GetMesh()->SetSkeletalMesh(CharacterMeshRef.Object);
@@ -84,6 +86,7 @@ AABCharacterBase::AABCharacterBase()
 
     // Stat Component 
     Stat = CreateDefaultSubobject<UABCharacterStatComponent>(TEXT("Stat"));
+    Inventory = CreateDefaultSubobject<UABCharacterInvenComponent>(TEXT("Inventory"));
 
     // Widget Component 
     HpBar = CreateDefaultSubobject<UABWidgetComponent>(TEXT("Widget"));
@@ -269,10 +272,36 @@ void AABCharacterBase::SetupCharacterWidget(UABUserWidget* InUserWidget)
     }
 }
 
+void AABCharacterBase::SetupInvenWidget(UABInventoryWidget* InInventoryWidget)
+{
+    if (!InInventoryWidget || !Inventory)  // Inventory가 nullptr인지 확인
+    {
+        UE_LOG(LogTemp, Error, TEXT("SetupInvenWidget failed due to nullptr (InventoryWidget or Inventory)"));
+        return;
+    }
+
+    UABInventoryWidget* InventoryWidget = Cast<UABInventoryWidget>(InInventoryWidget);
+    if (InventoryWidget)
+    {
+        InventoryWidget->UpdateInventory(Inventory->GetItems());
+        Inventory->OnInventoryUpdated.AddUObject(InventoryWidget, &UABInventoryWidget::UpdateInventory);
+    }
+}
+
+
+void AABCharacterBase::PickedItem(UABItemData* InItemData)
+{
+    if (InItemData)
+    {
+        Inventory->AddItem(InItemData);
+    }
+}
+
 void AABCharacterBase::TakeItem(UABItemData* InItemData)
 {
     if (InItemData)
     {
+        Inventory->RemoveItem(InItemData);
         TakeItemActions[(uint8)InItemData->Type].ItemDelegate.ExecuteIfBound(InItemData);
     }
 }

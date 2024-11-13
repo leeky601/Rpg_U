@@ -16,9 +16,16 @@ class ARENABATTLE_API AABPlayerController : public APlayerController
 	
 public:
 	AABPlayerController();
-	
+
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	virtual void SetupInputComponent() override;
+
+public:
+	void ToggleInventory();
+
 	
 	// HUD Section
 protected:
@@ -27,4 +34,20 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = HUD)
 	TObjectPtr<class UABHUDWidget> ABHUDWidget;
+
+	// Inventory Section
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> InvenAction;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory)
+	TSubclassOf<class UABInventoryWidget> ABInventoryWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory)
+	TObjectPtr<class UABInventoryWidget> ABInventoryWidget;
+
+private:
+	bool bIsInventoryOpen = false;
+
 };

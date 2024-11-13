@@ -5,6 +5,7 @@
 #include "Engine/AssetManager.h"
 #include "AI/ABAIController.h"
 #include "CharacterStat/ABCharacterStatComponent.h"
+#include "Item/ABItemBox.h"
 
 AABCharacterNonPlayer::AABCharacterNonPlayer()
 {
@@ -12,6 +13,8 @@ AABCharacterNonPlayer::AABCharacterNonPlayer()
 
 	AIControllerClass = AABAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	RewardBoxClass = AABItemBox::StaticClass();
 }
 
 void AABCharacterNonPlayer::PostInitializeComponents()
@@ -40,6 +43,8 @@ void AABCharacterNonPlayer::SetDead()
 			Destroy();
 		}
 	), DeadEventDelayTime, false);
+
+	SpawnItem();
 }
 
 void AABCharacterNonPlayer::NPCMeshLoadCompleted()
@@ -55,6 +60,16 @@ void AABCharacterNonPlayer::NPCMeshLoadCompleted()
 	}
 
 	NPCMeshHandle->ReleaseHandle();
+}
+
+void AABCharacterNonPlayer::SpawnItem()
+{
+	if (RewardBoxClass)
+	{
+		FTransform SpawnTransform(GetActorLocation());
+			
+		AABItemBox* SpawnedRewardBox = GetWorld()->SpawnActor<AABItemBox>(RewardBoxClass, SpawnTransform);		
+	}
 }
 
 float AABCharacterNonPlayer::GetAIPatrolRadius()

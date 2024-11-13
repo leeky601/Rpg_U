@@ -10,6 +10,7 @@
 #include "ABCharacterControlData.h"
 #include "UI/ABHUDWidget.h"
 #include "CharacterStat/ABCharacterStatComponent.h"
+#include "Item/ABWeaponItemData.h"
 
 AABCharacterPlayer::AABCharacterPlayer()
 {
@@ -22,6 +23,8 @@ AABCharacterPlayer::AABCharacterPlayer()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	
 
 	// Input
 	/*static ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/ArenaBattle/Input/IMC_Default.IMC_Default'"));
@@ -41,6 +44,7 @@ AABCharacterPlayer::AABCharacterPlayer()
 	{
 		LookAction = InputActionLookRef.Object;
 	}*/
+	
 
 	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionJumpRef(TEXT("/Script/EnhancedInput.InputAction'/Game/ArenaBattle/Input/Actions/IA_Jump.IA_Jump'"));
 	if (nullptr != InputActionJumpRef.Object)
@@ -78,6 +82,10 @@ AABCharacterPlayer::AABCharacterPlayer()
 	{
 		AttackAction = InputActionAttackRef.Object;
 	}
+
+	
+
+	
 
 	CurrentCharacterControlType = ECharacterControlType::Shoulder;
 }
@@ -119,6 +127,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(ShoulderLookAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::ShoulderLook);
 	EnhancedInputComponent->BindAction(QuaterMoveAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::QuaterMove);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::Attack);
+	
 }
 
 void AABCharacterPlayer::ChangeCharacterControl()
@@ -227,3 +236,5 @@ void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InHUDWidget)
 		Stat->OnHpChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateHpBar);
 	}
 }
+
+

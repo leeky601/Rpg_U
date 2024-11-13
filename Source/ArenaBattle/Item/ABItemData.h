@@ -31,4 +31,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Type)
 	EItemType Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Textures")
+	TSoftObjectPtr<UTexture2D> Texture;
 };

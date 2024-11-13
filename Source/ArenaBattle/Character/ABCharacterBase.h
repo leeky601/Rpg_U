@@ -7,6 +7,7 @@
 #include "Interface/ABAnimationAttackInterface.h"
 #include "Interface/ABCharacterWidgetInterface.h"
 #include "Interface/ABCharacterItemInterface.h"
+#include "Interface/ABInventoryWidgetInterface.h"
 #include "GameData/ABCharacterStat.h"
 #include "ABCharacterBase.generated.h"
 
@@ -31,7 +32,7 @@ struct FTakeItemDelegateWrapper
 };
 
 UCLASS()
-class ARENABATTLE_API AABCharacterBase : public ACharacter, public IABAnimationAttackInterface, public IABCharacterWidgetInterface, public IABCharacterItemInterface
+class ARENABATTLE_API AABCharacterBase : public ACharacter, public IABAnimationAttackInterface, public IABCharacterWidgetInterface, public IABCharacterItemInterface, public IABInventoryWidgetInterface
 {
 	GENERATED_BODY()
 
@@ -81,10 +82,13 @@ protected:
 
 	float DeadEventDelayTime = 5.0f;
 
-	// Stat Section
+	// State Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UABCharacterStatComponent> Stat;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UABCharacterInvenComponent> Inventory;
 
 	// UI Widget Section
 protected:
@@ -92,6 +96,8 @@ protected:
 	TObjectPtr<class UWidgetComponent> HpBar;
 
 	virtual void SetupCharacterWidget(class UABUserWidget* InUserWidget) override;
+
+	virtual void SetupInvenWidget(class UABInventoryWidget* InInventoryWidget) override;
 
 	// Item Section
 protected:
@@ -101,6 +107,7 @@ protected:
 	UPROPERTY()
 	TArray<FTakeItemDelegateWrapper> TakeItemActions;
 
+	virtual void PickedItem(class UABItemData* InItemData) override;
 	virtual void TakeItem(class UABItemData* InItemData) override;
 	virtual void DrinkPotion(class UABItemData* InItemData);
 	virtual void EquipWeapon(class UABItemData* InItemData);

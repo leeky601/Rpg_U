@@ -25,6 +25,10 @@ protected:
 protected:
 	void SetDead() override;
 	void NPCMeshLoadCompleted();
+	void SpawnItem();
+
+	UPROPERTY(VisibleAnywhere, Category = Reward, Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AABItemBox> RewardBoxClass; 
 
 	UPROPERTY(config)
 	TArray<FSoftObjectPath> NPCMeshes;

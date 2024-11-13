@@ -74,7 +74,7 @@ void AABItemBox::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 	IABCharacterItemInterface* OverlappingPawn = Cast<IABCharacterItemInterface>(OtherActor);
 	if (OverlappingPawn)
 	{
-		OverlappingPawn->TakeItem(Item);
+		OverlappingPawn->PickedItem(Item);
 	}
 
 	Effect->Activate(true);

@@ -61,6 +61,7 @@ protected:
 	TObjectPtr<class UInputAction> AttackAction;
 
 
+
 	void ShoulderMove(const FInputActionValue& Value);
 	void ShoulderLook(const FInputActionValue& Value);
 
@@ -73,4 +74,5 @@ protected:
 // UI Section
 protected:
 	virtual void SetupHUDWidget(class UABHUDWidget* InHUDWidget) override;
+
 };
