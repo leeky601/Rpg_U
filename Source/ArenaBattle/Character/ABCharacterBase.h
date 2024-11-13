@@ -82,6 +82,8 @@ protected:
 
 	float DeadEventDelayTime = 5.0f;
 
+	float ItemEventDelayTime = 2.0f;
+
 	// State Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))

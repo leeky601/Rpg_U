@@ -7,7 +7,7 @@
 #include "ABCharacterInvenComponent.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnInventoryUpdated, const TArray<TObjectPtr<class UABItemData>>& /*In*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnInventoryUpdated, const TArray<TObjectPtr<class UABItemData>>& /*InItem*/);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ARENABATTLE_API UABCharacterInvenComponent : public UActorComponent

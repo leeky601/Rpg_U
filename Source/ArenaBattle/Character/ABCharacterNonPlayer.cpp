@@ -44,7 +44,14 @@ void AABCharacterNonPlayer::SetDead()
 		}
 	), DeadEventDelayTime, false);
 
-	SpawnItem();
+	FTimerHandle ItemTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda(
+		[&]()
+		{
+			SpawnItem();
+		}
+	), ItemEventDelayTime, false);
+	
 }
 
 void AABCharacterNonPlayer::NPCMeshLoadCompleted()

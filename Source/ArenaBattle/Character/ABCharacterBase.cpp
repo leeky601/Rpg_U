@@ -222,18 +222,17 @@ void AABCharacterBase::AttackHitCheck()
     if (HitDetected)
     {
         FDamageEvent DamageEvent;
-        OutHitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
+        OutHitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this); 
     }
 
-#if ENABLE_DRAW_DEBUG
-
-    FVector CapsuleOrigin = Start + (End - Start) * 0.5f;
-    float CapsuleHalfHeight = AttackRange * 0.5f;
-    FColor DrawColor = HitDetected ? FColor::Green : FColor::Red;
-
-    DrawDebugCapsule(GetWorld(), CapsuleOrigin, CapsuleHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), DrawColor, false, 5.0f);
-
-#endif
+//#if ENABLE_DRAW_DEBUG
+//    FVector CapsuleOrigin = Start + (End - Start) * 0.5f;
+//    float CapsuleHalfHeight = AttackRange * 0.5f;
+//    FColor DrawColor = HitDetected ? FColor::Green : FColor::Red;
+//
+//    DrawDebugCapsule(GetWorld(), CapsuleOrigin, CapsuleHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), DrawColor, false, 5.0f);
+//
+//#endif
 }
 
 float AABCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -274,12 +273,6 @@ void AABCharacterBase::SetupCharacterWidget(UABUserWidget* InUserWidget)
 
 void AABCharacterBase::SetupInvenWidget(UABInventoryWidget* InInventoryWidget)
 {
-    if (!InInventoryWidget || !Inventory)  // Inventory가 nullptr인지 확인
-    {
-        UE_LOG(LogTemp, Error, TEXT("SetupInvenWidget failed due to nullptr (InventoryWidget or Inventory)"));
-        return;
-    }
-
     UABInventoryWidget* InventoryWidget = Cast<UABInventoryWidget>(InInventoryWidget);
     if (InventoryWidget)
     {
