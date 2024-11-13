@@ -9,6 +9,7 @@
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "Components/SizeBox.h"
+#include "Interface/ABControllerUIInterface.h"
 
 void UABInventoryWidget::NativeConstruct()
 {
@@ -29,6 +30,12 @@ void UABInventoryWidget::NativeConstruct()
             UE_LOG(LogTemp, Warning, TEXT("Button with name %s not found"), *ButtonName);
         }
     }
+
+    if (UButton* CloseButton = Cast<UButton>(GetWidgetFromName(TEXT("CloseButton"))))
+    {
+        CloseButton->OnClicked.AddDynamic(this, &UABInventoryWidget::OnCloseButtonClicked);
+    }
+
 
     IABInventoryWidgetInterface* InvenPawn = Cast<IABInventoryWidgetInterface>(GetOwningPlayerPawn());
     if (InvenPawn)
@@ -53,6 +60,15 @@ void UABInventoryWidget::OnItemClicked()
             }
             break;
         }
+    }
+}
+
+void UABInventoryWidget::OnCloseButtonClicked()
+{
+    IABControllerUIInterface* PawnControler = Cast<IABControllerUIInterface>(GetOwningPlayer());
+    if (PawnControler)
+    {
+        PawnControler->ToggleInventory();
     }
 }
 

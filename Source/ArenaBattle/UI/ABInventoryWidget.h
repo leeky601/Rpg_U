@@ -31,6 +31,9 @@ protected:
     UFUNCTION()
     void OnItemClicked();
 
+    UFUNCTION()
+    void OnCloseButtonClicked();
+
 protected:
     UPROPERTY()
     TObjectPtr<class UUniformGridPanel> InventoryGrid;

@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Interface/ABControllerUIInterface.h"
 #include "ABPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ARENABATTLE_API AABPlayerController : public APlayerController
+class ARENABATTLE_API AABPlayerController : public APlayerController, public IABControllerUIInterface
 {
 	GENERATED_BODY()
 	
@@ -24,7 +25,7 @@ public:
 	virtual void SetupInputComponent() override;
 
 public:
-	void ToggleInventory();
+	virtual void ToggleInventory() override;
 
 	
 	// HUD Section
