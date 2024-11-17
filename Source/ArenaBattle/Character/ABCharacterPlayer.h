@@ -60,6 +60,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> AttackAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> SkillQAction;
+
 
 
 	void ShoulderMove(const FInputActionValue& Value);
@@ -70,6 +73,8 @@ protected:
 	ECharacterControlType CurrentCharacterControlType;
 
 	void Attack();
+
+	void UseQSkill();
 
 // UI Section
 protected:

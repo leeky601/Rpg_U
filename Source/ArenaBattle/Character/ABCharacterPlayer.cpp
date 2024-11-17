@@ -83,9 +83,11 @@ AABCharacterPlayer::AABCharacterPlayer()
 		AttackAction = InputActionAttackRef.Object;
 	}
 
-	
-
-	
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionSkillQActionRef(TEXT("/Script/EnhancedInput.InputAction'/Game/ArenaBattle/Input/Actions/IA_SkillQ.IA_SkillQ'"));
+	if (nullptr != InputActionSkillQActionRef.Object)
+	{
+		SkillQAction = InputActionSkillQActionRef.Object;
+	}	
 
 	CurrentCharacterControlType = ECharacterControlType::Shoulder;
 }
@@ -127,6 +129,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(ShoulderLookAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::ShoulderLook);
 	EnhancedInputComponent->BindAction(QuaterMoveAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::QuaterMove);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::Attack);
+	EnhancedInputComponent->BindAction(SkillQAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::UseQSkill);
 	
 }
 
@@ -223,6 +226,11 @@ void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 void AABCharacterPlayer::Attack()
 {
 	ProcessComboCommand();
+}
+
+void AABCharacterPlayer::UseQSkill()
+{
+	UseSkill();
 }
 
 void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InHUDWidget)

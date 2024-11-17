@@ -70,7 +70,7 @@ AABStageGimmick::AABStageGimmick()
 		FVector BoxLocation = Stage->GetSocketLocation(GateSocket) / 2;
 		RewardBoxLocations.Add(GateSocket, BoxLocation);
 	}
-
+	
 	// Stage Stat
 	CurrentStageNum = 0;
 }

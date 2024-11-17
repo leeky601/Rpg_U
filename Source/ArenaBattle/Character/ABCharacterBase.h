@@ -69,7 +69,11 @@ protected:
 
 //Atack Section
 protected:
-	virtual void AttackHitCheck() override;
+	virtual void ExcuteHitCheck() override;
+	void HitCheck(float InAttackRange,float InAttackDamage);
+	void AttackHitCheck();
+	void SkillHitcheck();
+	
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	// Dead Section
@@ -120,4 +124,8 @@ public:
 	int32 GetLevel();
 	void SetLevel(int32 InNewLevel);
 	void ApplyStat(const FABCharacterStat& BaseStat, const FABCharacterStat& ModifierStat);
+
+	// Skill Section
+protected:
+	void UseSkill();
 };

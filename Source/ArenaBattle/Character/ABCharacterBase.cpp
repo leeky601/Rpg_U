@@ -207,14 +207,18 @@ void AABCharacterBase::ComboCheck()
     }
 }
 
-void AABCharacterBase::AttackHitCheck()
+void AABCharacterBase::ExcuteHitCheck()
+{
+}
+
+void AABCharacterBase::HitCheck(float InAttackRange, float InAttackDamage)
 {
     FHitResult OutHitResult;
     FCollisionQueryParams Params(SCENE_QUERY_STAT(Attack), false, this);
 
-    const float AttackRange = Stat->GetTotalStat().AttackRange;
+    const float AttackRange = InAttackRange;
     const float AttackRadius = Stat->GetAttackRadius();
-    const float AttackDamage = Stat->GetTotalStat().Attack;
+    const float AttackDamage = InAttackDamage;
     const FVector Start = GetActorLocation() + GetActorForwardVector() * GetCapsuleComponent()->GetScaledCapsuleRadius();
     const FVector End = Start + GetActorForwardVector() * AttackRange;
 
@@ -222,17 +226,33 @@ void AABCharacterBase::AttackHitCheck()
     if (HitDetected)
     {
         FDamageEvent DamageEvent;
-        OutHitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this); 
+        OutHitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
     }
 
-//#if ENABLE_DRAW_DEBUG
-//    FVector CapsuleOrigin = Start + (End - Start) * 0.5f;
-//    float CapsuleHalfHeight = AttackRange * 0.5f;
-//    FColor DrawColor = HitDetected ? FColor::Green : FColor::Red;
-//
-//    DrawDebugCapsule(GetWorld(), CapsuleOrigin, CapsuleHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), DrawColor, false, 5.0f);
-//
-//#endif
+#if ENABLE_DRAW_DEBUG
+    FVector CapsuleOrigin = Start + (End - Start) * 0.5f;
+    float CapsuleHalfHeight = AttackRange * 0.5f;
+    FColor DrawColor = HitDetected ? FColor::Green : FColor::Red;
+
+    DrawDebugCapsule(GetWorld(), CapsuleOrigin, CapsuleHalfHeight, AttackRadius, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), DrawColor, false, 5.0f);
+
+#endif
+}
+
+void AABCharacterBase::AttackHitCheck()
+{
+    const float AttackRange = Stat->GetTotalStat().AttackRange;
+    const float AttackDamage = Stat->GetTotalStat().Attack;
+
+    HitCheck(AttackRange, AttackDamage);
+}
+
+void AABCharacterBase::SkillHitcheck()
+{
+    const float AttackRange = Stat->GetTotalStat().AttackRange;
+    const float AttackDamage = Stat->GetTotalStat().Attack;
+
+    HitCheck(AttackRange, AttackDamage);
 }
 
 float AABCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -345,6 +365,10 @@ void AABCharacterBase::ApplyStat(const FABCharacterStat& BaseStat, const FABChar
 {
     float MovementSpeed = (BaseStat + ModifierStat).MovementSpeed;
     GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
+}
+
+void AABCharacterBase::UseSkill()
+{
 }
 
 

@@ -11,7 +11,8 @@ enum class EItemType : uint8
 {
 	Weapon = 0,
 	Potion,
-	Scroll
+	Scroll,
+	Equip
 };
 
 /**
@@ -33,5 +34,5 @@ public:
 	EItemType Type;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Textures")
-	TSoftObjectPtr<UTexture2D> Texture;
+	TSoftObjectPtr<UTexture2D> ItemTexture;
 };

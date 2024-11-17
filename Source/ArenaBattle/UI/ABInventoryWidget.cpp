@@ -10,6 +10,7 @@
 #include "Engine/StreamableManager.h"
 #include "Components/SizeBox.h"
 #include "Interface/ABControllerUIInterface.h"
+#include <Components/CanvasPanelSlot.h>
 
 void UABInventoryWidget::NativeConstruct()
 {
@@ -78,31 +79,32 @@ void UABInventoryWidget::UpdateInventory(const TArray<TObjectPtr<UABItemData>>& 
     for (auto& Pair : ButtonItemMap)
     {
         TObjectPtr<UButton> Button = Pair.Key;
-       
+
         if (ItemIndex < Items.Num())
         {
             TObjectPtr<UABItemData> ItemData = Items[ItemIndex];
             if (ItemData)
             {
-                if (ItemData->Texture.IsPending())
+                if (ItemData->ItemTexture.IsPending())
                 {
-                    ItemData->Texture.LoadSynchronous();
+                    ItemData->ItemTexture.LoadSynchronous();
                 }
 
-                if (ItemData->Texture.IsValid() && Pair.Value != ItemData)
+                if (ItemData->ItemTexture.IsValid() && Pair.Value != ItemData)
                 {
                     Button->ClearChildren();
-                    UTexture2D* LoadedTexture = ItemData->Texture.Get();
+                    UTexture2D* LoadedTexture = ItemData->ItemTexture.Get();
 
-                    
+
                     USizeBox* ItemSizeBox = NewObject<USizeBox>(Button);
-                    ItemSizeBox->SetWidthOverride(Button->GetDesiredSize().X);  
-                    ItemSizeBox->SetHeightOverride(Button->GetDesiredSize().Y);
+                    ItemSizeBox->SetWidthOverride(48.0f);
+                    ItemSizeBox->SetHeightOverride(48.0f);
                     Button->AddChild(ItemSizeBox);
 
-                    
+
                     UImage* ItemImage = NewObject<UImage>(ItemSizeBox);
                     ItemImage->SetBrushFromTexture(LoadedTexture);
+                    ItemImage->SetBrushSize(FVector2D(48.0f, 48.0f));
                     ItemSizeBox->AddChild(ItemImage);
 
                     Pair.Value = ItemData;
@@ -113,7 +115,7 @@ void UABInventoryWidget::UpdateInventory(const TArray<TObjectPtr<UABItemData>>& 
         else
         {
             Button->ClearChildren();
-            Pair.Value = nullptr;  
+            Pair.Value = nullptr;
         }
     }
 }
