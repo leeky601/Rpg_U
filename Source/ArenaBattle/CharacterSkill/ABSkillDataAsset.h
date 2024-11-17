@@ -21,6 +21,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
 	TSoftObjectPtr<UTexture2D> SkillTexture;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+	TSoftObjectPtr<UParticleSystem> SkillEffect;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skill")
 	float SkillDamage;
 

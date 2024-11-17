@@ -15,6 +15,9 @@
 #include "UI/ABHpBarWidget.h"
 #include "UI/ABInventoryWidget.h"
 #include "Item/ABItems.h"
+#include "CharacterSkill/ABSkillDataAsset.h"
+#include <Kismet/GameplayStatics.h>
+#include "Particles/ParticleSystem.h"
 
 DEFINE_LOG_CATEGORY(LogABCharacter);
 
@@ -78,10 +81,17 @@ AABCharacterBase::AABCharacterBase()
     {
         ComboActionData = ComboActionDataRef.Object;
     }
+
     static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Script/Engine.AnimMontage'/Game/ArenaBattle/Animation/AM_Dead.AM_Dead'"));
     if (DeadMontageRef.Object)
     {
         DeadMontage = DeadMontageRef.Object;
+    }
+
+    static ConstructorHelpers::FObjectFinder<UABSkillDataAsset> QSkillDataRef(TEXT("/Script/ArenaBattle.ABSkillDataAsset'/Game/ArenaBattle/Skills/ABS_Skill1.ABS_Skill1'"));
+    if (QSkillDataRef.Object)
+    {
+        QSkillData = QSkillDataRef.Object;
     }
 
     // Stat Component 
@@ -209,6 +219,24 @@ void AABCharacterBase::ComboCheck()
 
 void AABCharacterBase::ExcuteHitCheck()
 {
+    if (IsSkill)
+    {
+        SkillHitcheck();
+        if (QSkillData)
+        {
+            if (QSkillData->SkillEffect.IsPending())
+            {
+                QSkillData->SkillEffect.LoadSynchronous();
+            }
+        }
+        FVector EffectLocation = GetActorLocation(); // 오프셋 적용
+        FRotator EffectRotation = GetActorRotation();
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), QSkillData->SkillEffect.Get(), EffectLocation, EffectRotation);
+    }
+    else
+    {
+        AttackHitCheck();
+    }
 }
 
 void AABCharacterBase::HitCheck(float InAttackRange, float InAttackDamage)
@@ -249,8 +277,8 @@ void AABCharacterBase::AttackHitCheck()
 
 void AABCharacterBase::SkillHitcheck()
 {
-    const float AttackRange = Stat->GetTotalStat().AttackRange;
-    const float AttackDamage = Stat->GetTotalStat().Attack;
+    const float AttackRange = Stat->GetTotalStat().AttackRange + QSkillData->SkillRange;
+    const float AttackDamage = Stat->GetTotalStat().Attack + QSkillData->SkillDamage;
 
     HitCheck(AttackRange, AttackDamage);
 }
@@ -369,6 +397,28 @@ void AABCharacterBase::ApplyStat(const FABCharacterStat& BaseStat, const FABChar
 
 void AABCharacterBase::UseSkill()
 {
+    GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
+    const float AttackSpeedRate = Stat->GetTotalStat().AttackSpeed;
+    UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+    if (QSkillData)
+    {
+        if (QSkillData->SkillMontage.IsPending())
+        {
+            QSkillData->SkillMontage.LoadSynchronous();
+        }  
+    }
+    AnimInstance->Montage_Play(QSkillData->SkillMontage.Get(), AttackSpeedRate);
+
+    FOnMontageEnded EndDelegate;
+    EndDelegate.BindUObject(this, &AABCharacterBase::SkillEnd);
+    AnimInstance->Montage_SetEndDelegate(EndDelegate, QSkillData->SkillMontage.Get());
+}
+
+void AABCharacterBase::SkillEnd(UAnimMontage* TargetMontage, bool IsProperlyEnded)
+{
+    GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+    IsSkill = false;
 }
 
 

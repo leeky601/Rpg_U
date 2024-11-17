@@ -128,4 +128,9 @@ public:
 	// Skill Section
 protected:
 	void UseSkill();
+	void SkillEnd(UAnimMontage* TargetMontage, bool IsProperlyEnded);
+
+	TObjectPtr<class UABSkillDataAsset> QSkillData;
+
+	bool IsSkill = false;
 };

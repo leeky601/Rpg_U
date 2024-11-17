@@ -225,11 +225,18 @@ void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 
 void AABCharacterPlayer::Attack()
 {
+	if (IsSkill) {
+		return;
+	}
 	ProcessComboCommand();
 }
 
 void AABCharacterPlayer::UseQSkill()
 {
+	if (IsSkill) {
+		return;
+	}
+	IsSkill = true;
 	UseSkill();
 }
 
