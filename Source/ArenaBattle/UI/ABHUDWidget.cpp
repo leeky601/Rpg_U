@@ -5,6 +5,7 @@
 #include "Interface/ABCharacterHUDInterface.h"
 #include "ABHpBarWidget.h"
 #include "ABCharacterStatWidget.h"
+#include "ABCharacterSkillWidget.h"
 
 UABHUDWidget::UABHUDWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -23,6 +24,11 @@ void UABHUDWidget::UpdateHpBar(float NewCurrentHp)
 	HpBar->UpdateHpBar(NewCurrentHp);
 }
 
+void UABHUDWidget::UpdateSkill(float CooldownPercent)
+{
+	CharacterSkill->UpdateCooldown(CooldownPercent);
+}
+
 void UABHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -32,6 +38,9 @@ void UABHUDWidget::NativeConstruct()
 
 	CharacterStat = Cast<UABCharacterStatWidget>(GetWidgetFromName(TEXT("WidgetCharacterStat")));
 	ensure(CharacterStat);
+
+	CharacterSkill = Cast<UABCharacterSkillWidget>(GetWidgetFromName(TEXT("WidgetCharacterSkill")));
+	ensure(CharacterSkill);
 
 	IABCharacterHUDInterface* HUDPawn = Cast<IABCharacterHUDInterface>(GetOwningPlayerPawn());
 	if (HUDPawn)

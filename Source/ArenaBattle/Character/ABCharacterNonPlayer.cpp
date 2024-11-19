@@ -45,12 +45,7 @@ void AABCharacterNonPlayer::SetDead()
 	), DeadEventDelayTime, false);
 
 	FTimerHandle ItemTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda(
-		[&]()
-		{
-			SpawnItem();
-		}
-	), ItemEventDelayTime, false);
+	GetWorld()->GetTimerManager().SetTimer(ItemTimerHandle, this, &AABCharacterNonPlayer::SpawnItem, ItemEventDelayTime, false);
 	
 }
 
@@ -73,7 +68,7 @@ void AABCharacterNonPlayer::SpawnItem()
 {
 	if (RewardBoxClass)
 	{
-		FTransform SpawnTransform(GetActorLocation());
+		FTransform SpawnTransform(GetActorLocation() - FVector(0.0f, 0.0f, 66.0f));
 			
 		AABItemBox* SpawnedRewardBox = GetWorld()->SpawnActor<AABItemBox>(RewardBoxClass, SpawnTransform);		
 	}

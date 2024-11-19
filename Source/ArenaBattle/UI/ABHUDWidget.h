@@ -22,6 +22,7 @@ public:
 public:
 	void UpdateStat(const FABCharacterStat& BaseStat, const FABCharacterStat& ModifierStat);
 	void UpdateHpBar(float NewCurrentHp);
+	void UpdateSkill(float CooldownPercent);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -32,4 +33,7 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<class UABCharacterStatWidget> CharacterStat;
+
+	UPROPERTY()
+	TObjectPtr<class UABCharacterSkillWidget> CharacterSkill;
 };

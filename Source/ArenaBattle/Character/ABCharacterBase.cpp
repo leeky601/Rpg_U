@@ -11,9 +11,11 @@
 #include "Engine/DamageEvents.h"
 #include "CharacterStat/ABCharacterStatComponent.h"
 #include "CharacterStat/ABCharacterInvenComponent.h"
+#include "CharacterStat/ABCharacterSkillComponent.h"
 #include "UI/ABWidgetComponent.h"
 #include "UI/ABHpBarWidget.h"
 #include "UI/ABInventoryWidget.h"
+#include "UI/ABCharacterSkillWidget.h"
 #include "Item/ABItems.h"
 #include "CharacterSkill/ABSkillDataAsset.h"
 #include <Kismet/GameplayStatics.h>
@@ -97,6 +99,7 @@ AABCharacterBase::AABCharacterBase()
     // Stat Component 
     Stat = CreateDefaultSubobject<UABCharacterStatComponent>(TEXT("Stat"));
     Inventory = CreateDefaultSubobject<UABCharacterInvenComponent>(TEXT("Inventory"));
+    Skill = CreateDefaultSubobject<UABCharacterSkillComponent>(TEXT("Skill"));
 
     // Widget Component 
     HpBar = CreateDefaultSubobject<UABWidgetComponent>(TEXT("Widget"));
@@ -229,7 +232,9 @@ void AABCharacterBase::ExcuteHitCheck()
                 QSkillData->SkillEffect.LoadSynchronous();
             }
         }
-        FVector EffectLocation = GetActorLocation(); // 오프셋 적용
+        
+        float EffectDistance = 200.0f;
+        FVector EffectLocation = GetActorLocation() + (GetActorForwardVector() * EffectDistance);
         FRotator EffectRotation = GetActorRotation();
         UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), QSkillData->SkillEffect.Get(), EffectLocation, EffectRotation);
     }
@@ -319,9 +324,11 @@ void AABCharacterBase::SetupCharacterWidget(UABUserWidget* InUserWidget)
     }
 }
 
+
+
 void AABCharacterBase::SetupInvenWidget(UABInventoryWidget* InInventoryWidget)
 {
-    UABInventoryWidget* InventoryWidget = Cast<UABInventoryWidget>(InInventoryWidget);
+    UABInventoryWidget* InventoryWidget = InInventoryWidget;
     if (InventoryWidget)
     {
         InventoryWidget->UpdateInventory(Inventory->GetItems());

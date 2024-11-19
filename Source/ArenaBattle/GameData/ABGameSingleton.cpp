@@ -29,7 +29,7 @@ UABGameSingleton::UABGameSingleton()
 
 UABGameSingleton& UABGameSingleton::Get()
 {
-	UABGameSingleton* Singleton = CastChecked< UABGameSingleton>(GEngine->GameSingleton);
+	UABGameSingleton* Singleton = CastChecked<UABGameSingleton>(GEngine->GameSingleton);
 	if (Singleton)
 	{
 		return *Singleton;

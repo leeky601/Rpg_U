@@ -10,6 +10,7 @@
 #include "ABCharacterControlData.h"
 #include "UI/ABHUDWidget.h"
 #include "CharacterStat/ABCharacterStatComponent.h"
+#include "CharacterStat/ABCharacterSkillComponent.h"
 #include "Item/ABWeaponItemData.h"
 
 AABCharacterPlayer::AABCharacterPlayer()
@@ -238,6 +239,7 @@ void AABCharacterPlayer::UseQSkill()
 	}
 	IsSkill = true;
 	UseSkill();
+	Skill->ActivateSkill();
 }
 
 void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InHUDWidget)
@@ -246,9 +248,11 @@ void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InHUDWidget)
 	{
 		InHUDWidget->UpdateStat(Stat->GetBaseStat(), Stat->GetModifierStat());
 		InHUDWidget->UpdateHpBar(Stat->GetCurrentHp());
+		InHUDWidget->UpdateSkill(Skill->GetCooldownPercent());
 
 		Stat->OnStatChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateStat);
 		Stat->OnHpChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateHpBar);
+		Skill->OnCooldownUpdate.AddUObject(InHUDWidget, &UABHUDWidget::UpdateSkill);
 	}
 }
 
