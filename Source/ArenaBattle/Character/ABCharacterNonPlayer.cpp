@@ -6,6 +6,7 @@
 #include "AI/ABAIController.h"
 #include "CharacterStat/ABCharacterStatComponent.h"
 #include "Item/ABItemBox.h"
+#include "Kismet/GameplayStatics.h"
 
 AABCharacterNonPlayer::AABCharacterNonPlayer()
 {
@@ -15,6 +16,7 @@ AABCharacterNonPlayer::AABCharacterNonPlayer()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	RewardBoxClass = AABItemBox::StaticClass();
+
 }
 
 void AABCharacterNonPlayer::PostInitializeComponents()
@@ -29,6 +31,13 @@ void AABCharacterNonPlayer::PostInitializeComponents()
 void AABCharacterNonPlayer::SetDead()
 {
 	Super::SetDead();
+
+	float GiveExp = Stat->GetMaxExp() / 4.0f;
+
+	AActor* GetPlayer = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AABCharacterBase* Player = Cast<AABCharacterBase>(GetPlayer);
+
+	Player->GetStat()->AddExp(GiveExp);
 
 	AABAIController* ABAIController = Cast<AABAIController>(GetController());
 	if (ABAIController)

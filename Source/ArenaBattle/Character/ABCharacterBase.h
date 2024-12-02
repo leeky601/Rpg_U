@@ -31,6 +31,7 @@ struct FTakeItemDelegateWrapper
 	FOnTakeItemDelegate ItemDelegate;
 };
 
+
 UCLASS()
 class ARENABATTLE_API AABCharacterBase : public ACharacter, public IABAnimationAttackInterface, public IABCharacterWidgetInterface, public IABCharacterItemInterface, public IABInventoryWidgetInterface
 {
@@ -99,6 +100,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UABCharacterSkillComponent> Skill;
 
+public:
+	UABCharacterStatComponent* GetStat() const { return Stat; }
 	// UI Widget Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Widget, Meta = (AllowPrivateAccess = "true"))
@@ -130,10 +133,9 @@ public:
 
 	// Skill Section
 protected:
-	void UseSkill();
+	void UseSkill(class UABSkillDataAsset* InSkill);
 	void SkillEnd(UAnimMontage* TargetMontage, bool IsProperlyEnded);
-
-	TObjectPtr<class UABSkillDataAsset> QSkillData;
+	void SkillEffect();
 
 	bool IsSkill = false;
 };

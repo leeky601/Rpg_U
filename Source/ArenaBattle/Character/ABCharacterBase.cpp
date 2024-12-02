@@ -90,11 +90,6 @@ AABCharacterBase::AABCharacterBase()
         DeadMontage = DeadMontageRef.Object;
     }
 
-    static ConstructorHelpers::FObjectFinder<UABSkillDataAsset> QSkillDataRef(TEXT("/Script/ArenaBattle.ABSkillDataAsset'/Game/ArenaBattle/Skills/ABS_Skill1.ABS_Skill1'"));
-    if (QSkillDataRef.Object)
-    {
-        QSkillData = QSkillDataRef.Object;
-    }
 
     // Stat Component 
     Stat = CreateDefaultSubobject<UABCharacterStatComponent>(TEXT("Stat"));
@@ -224,19 +219,8 @@ void AABCharacterBase::ExcuteHitCheck()
 {
     if (IsSkill)
     {
+        SkillEffect();
         SkillHitcheck();
-        if (QSkillData)
-        {
-            if (QSkillData->SkillEffect.IsPending())
-            {
-                QSkillData->SkillEffect.LoadSynchronous();
-            }
-        }
-        
-        float EffectDistance = 200.0f;
-        FVector EffectLocation = GetActorLocation() + (GetActorForwardVector() * EffectDistance);
-        FRotator EffectRotation = GetActorRotation();
-        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), QSkillData->SkillEffect.Get(), EffectLocation, EffectRotation);
     }
     else
     {
@@ -282,8 +266,8 @@ void AABCharacterBase::AttackHitCheck()
 
 void AABCharacterBase::SkillHitcheck()
 {
-    const float AttackRange = Stat->GetTotalStat().AttackRange + QSkillData->SkillRange;
-    const float AttackDamage = Stat->GetTotalStat().Attack + QSkillData->SkillDamage;
+    const float AttackRange = Stat->GetTotalStat().AttackRange + Skill->QSkillData->SkillRange;
+    const float AttackDamage = Stat->GetTotalStat().Attack + Skill->QSkillData->SkillDamage;
 
     HitCheck(AttackRange, AttackDamage);
 }
@@ -319,8 +303,10 @@ void AABCharacterBase::SetupCharacterWidget(UABUserWidget* InUserWidget)
     {
         HpBarWidget->UpdateStat(Stat->GetBaseStat(), Stat->GetModifierStat());
         HpBarWidget->UpdateHpBar(Stat->GetCurrentHp());
+        HpBarWidget->UpdateLevel(GetLevel());
         Stat->OnHpChanged.AddUObject(HpBarWidget, &UABHpBarWidget::UpdateHpBar);
         Stat->OnStatChanged.AddUObject(HpBarWidget, &UABHpBarWidget::UpdateStat);
+        Stat->OnLevelChanged.AddUObject(HpBarWidget, &UABHpBarWidget::UpdateLevel);
     }
 }
 
@@ -402,30 +388,46 @@ void AABCharacterBase::ApplyStat(const FABCharacterStat& BaseStat, const FABChar
     GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
 }
 
-void AABCharacterBase::UseSkill()
+void AABCharacterBase::UseSkill(UABSkillDataAsset* InSkill)
 {
+    Skill->ActivateSkill();
     GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
     const float AttackSpeedRate = Stat->GetTotalStat().AttackSpeed;
     UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-    if (QSkillData)
+    if (InSkill)
     {
-        if (QSkillData->SkillMontage.IsPending())
+        if (InSkill->SkillMontage.IsPending())
         {
-            QSkillData->SkillMontage.LoadSynchronous();
+            InSkill->SkillMontage.LoadSynchronous();
         }  
+        AnimInstance->Montage_Play(InSkill->SkillMontage.Get(), AttackSpeedRate);
     }
-    AnimInstance->Montage_Play(QSkillData->SkillMontage.Get(), AttackSpeedRate);
 
     FOnMontageEnded EndDelegate;
     EndDelegate.BindUObject(this, &AABCharacterBase::SkillEnd);
-    AnimInstance->Montage_SetEndDelegate(EndDelegate, QSkillData->SkillMontage.Get());
+    AnimInstance->Montage_SetEndDelegate(EndDelegate, InSkill->SkillMontage.Get());
 }
 
 void AABCharacterBase::SkillEnd(UAnimMontage* TargetMontage, bool IsProperlyEnded)
 {
     GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
     IsSkill = false;
+}
+
+void AABCharacterBase::SkillEffect()
+{
+    if (Skill->QSkillData)
+    {
+        if (Skill->QSkillData->SkillEffect.IsPending())
+        {
+            Skill->QSkillData->SkillEffect.LoadSynchronous();
+        }
+    }
+    float EffectDistance = 200.0f;
+    FVector EffectLocation = GetActorLocation() + (GetActorForwardVector() * EffectDistance);
+    FRotator EffectRotation = GetActorRotation();
+    UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Skill->QSkillData->SkillEffect.Get(), EffectLocation, EffectRotation);
 }
 
 

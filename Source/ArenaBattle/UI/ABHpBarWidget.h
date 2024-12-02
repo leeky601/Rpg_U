@@ -24,7 +24,9 @@ protected:
 public:
 	void UpdateStat(const FABCharacterStat& BaseStat, const FABCharacterStat& ModifierStat);
 	void UpdateHpBar(float NewCurrentHp);
+	void UpdateLevel(float NewLevel);
 	FString GetHpStatText();
+	FString GetLevelText();
 
 protected:
 	UPROPERTY()
@@ -34,9 +36,17 @@ protected:
 	TObjectPtr<class UTextBlock> HpStat;
 
 	UPROPERTY()
+	TObjectPtr<class UTextBlock> Level;
+
+	UPROPERTY()
 	float CurrentHp;
 
 	UPROPERTY()
 	float MaxHp;
 
+	UPROPERTY()
+	float CurrentLevel;
+
+
+	
 };

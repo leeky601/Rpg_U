@@ -91,6 +91,7 @@ AABCharacterPlayer::AABCharacterPlayer()
 	}	
 
 	CurrentCharacterControlType = ECharacterControlType::Shoulder;
+	
 }
 
 void AABCharacterPlayer::BeginPlay()
@@ -132,6 +133,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::Attack);
 	EnhancedInputComponent->BindAction(SkillQAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::UseQSkill);
 	
+
 }
 
 void AABCharacterPlayer::ChangeCharacterControl()
@@ -234,12 +236,11 @@ void AABCharacterPlayer::Attack()
 
 void AABCharacterPlayer::UseQSkill()
 {
-	if (IsSkill) {
+	if (IsSkill || Skill->GetCooldownPercent() != 1) {
 		return;
 	}
 	IsSkill = true;
-	UseSkill();
-	Skill->ActivateSkill();
+	UseSkill(Skill->QSkillData);
 }
 
 void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InHUDWidget)
@@ -248,12 +249,18 @@ void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InHUDWidget)
 	{
 		InHUDWidget->UpdateStat(Stat->GetBaseStat(), Stat->GetModifierStat());
 		InHUDWidget->UpdateHpBar(Stat->GetCurrentHp());
+		InHUDWidget->UpdateLevel(GetLevel());
+		InHUDWidget->UpdateExp(Stat->GetCurrentExp());
 		InHUDWidget->UpdateSkill(Skill->GetCooldownPercent());
 
 		Stat->OnStatChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateStat);
 		Stat->OnHpChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateHpBar);
+		Stat->OnLevelChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateLevel);
+		Stat->OnExpChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateExp);
 		Skill->OnCooldownUpdate.AddUObject(InHUDWidget, &UABHUDWidget::UpdateSkill);
 	}
 }
+
+
 
 

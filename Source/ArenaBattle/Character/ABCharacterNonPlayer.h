@@ -8,9 +8,7 @@
 #include "Interface/ABCharacterAIInterface.h"
 #include "ABCharacterNonPlayer.generated.h"
 
-/**
- * 
- */
+
 UCLASS(config=ArenaBattle)
 class ARENABATTLE_API AABCharacterNonPlayer : public AABCharacterBase, public IABCharacterAIInterface
 {
@@ -48,4 +46,5 @@ protected:
 	FAICharacterAttackFinished OnAttackFinished;
 
 	virtual void NotifyComboActionEnd() override;
+
 };

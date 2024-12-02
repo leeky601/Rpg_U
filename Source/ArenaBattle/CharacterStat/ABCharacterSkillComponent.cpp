@@ -13,7 +13,7 @@ UABCharacterSkillComponent::UABCharacterSkillComponent()
         QSkillData = QSkillDataRef.Object;
     }
 
-	CooldownPercent = 0.0f;
+	CooldownPercent = 1.0f;
 }
 
 void UABCharacterSkillComponent::ActivateSkill()

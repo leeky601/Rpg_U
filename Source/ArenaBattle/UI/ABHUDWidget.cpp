@@ -6,6 +6,7 @@
 #include "ABHpBarWidget.h"
 #include "ABCharacterStatWidget.h"
 #include "ABCharacterSkillWidget.h"
+#include "ABCharacterExpWidget.h"
 
 UABHUDWidget::UABHUDWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -22,6 +23,16 @@ void UABHUDWidget::UpdateStat(const FABCharacterStat& BaseStat, const FABCharact
 void UABHUDWidget::UpdateHpBar(float NewCurrentHp)
 {
 	HpBar->UpdateHpBar(NewCurrentHp);
+}
+
+void UABHUDWidget::UpdateLevel(float NewLevel)
+{
+	HpBar->UpdateLevel(NewLevel);
+}
+
+void UABHUDWidget::UpdateExp(float NewExp)
+{
+	CharacterExp->UpdateExpBar(NewExp);
 }
 
 void UABHUDWidget::UpdateSkill(float CooldownPercent)
@@ -41,6 +52,9 @@ void UABHUDWidget::NativeConstruct()
 
 	CharacterSkill = Cast<UABCharacterSkillWidget>(GetWidgetFromName(TEXT("WidgetCharacterSkill")));
 	ensure(CharacterSkill);
+
+	CharacterExp = Cast<UABCharacterExpWidget>(GetWidgetFromName(TEXT("WidgetCharacterExp")));
+	ensure(CharacterExp);
 
 	IABCharacterHUDInterface* HUDPawn = Cast<IABCharacterHUDInterface>(GetOwningPlayerPawn());
 	if (HUDPawn)

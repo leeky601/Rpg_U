@@ -80,4 +80,7 @@ protected:
 protected:
 	virtual void SetupHUDWidget(class UABHUDWidget* InHUDWidget) override;
 
+
+
+
 };

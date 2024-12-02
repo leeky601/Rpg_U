@@ -22,6 +22,8 @@ public:
 public:
 	void UpdateStat(const FABCharacterStat& BaseStat, const FABCharacterStat& ModifierStat);
 	void UpdateHpBar(float NewCurrentHp);
+	void UpdateLevel(float NewLevel);
+	void UpdateExp(float NewExp);
 	void UpdateSkill(float CooldownPercent);
 
 protected:
@@ -36,4 +38,7 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<class UABCharacterSkillWidget> CharacterSkill;
+
+	UPROPERTY()
+	TObjectPtr<class UABCharacterExpWidget> CharacterExp;
 };
