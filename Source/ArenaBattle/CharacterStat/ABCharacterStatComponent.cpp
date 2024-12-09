@@ -10,7 +10,6 @@ UABCharacterStatComponent::UABCharacterStatComponent()
 	CurrentLevel = 1;
 	AttackRadius = 50.0f;
 	CurrentExp = 0;
-	MaxExp = 200;
 
 	bWantsInitializeComponent = true;
 }
@@ -32,13 +31,13 @@ void UABCharacterStatComponent::SetLevelStat(int32 InNewLevel)
 
 void UABCharacterStatComponent::AddExp(float InExp)
 {
-	CurrentExp = FMath::Clamp(CurrentExp + InExp, 0, MaxExp);
-	if (CurrentExp >= MaxExp)
+	CurrentExp += InExp;
+	if (CurrentExp >= BaseStat.EXP)
 	{
+		CurrentExp -= BaseStat.EXP;
 		SetLevelStat(CurrentLevel + 1);
-		CurrentExp = 0;
 	}
-	OnExpChanged.Broadcast(CurrentExp);
+	OnExpChanged.Broadcast(CurrentExp, BaseStat.EXP);
 }
 
 float UABCharacterStatComponent::ApplyDamage(float InDamage)

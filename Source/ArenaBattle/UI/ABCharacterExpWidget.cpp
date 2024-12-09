@@ -6,7 +6,7 @@
 
 UABCharacterExpWidget::UABCharacterExpWidget(const FObjectInitializer& ObjectInitializer): Super(ObjectInitializer)
 {
-	MaxExp = 200.0f;
+	
 }
 
 void UABCharacterExpWidget::NativeConstruct()
@@ -18,7 +18,7 @@ void UABCharacterExpWidget::NativeConstruct()
 
 }
 
-void UABCharacterExpWidget::UpdateExpBar(float NewExp)
+void UABCharacterExpWidget::UpdateExpBar(float NewExp, float MaxEXP)
 {
-	ExpProgressBar->SetPercent(NewExp / MaxExp);
+	ExpProgressBar->SetPercent(NewExp / MaxEXP);
 }

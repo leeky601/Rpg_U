@@ -30,9 +30,9 @@ void UABHUDWidget::UpdateLevel(float NewLevel)
 	HpBar->UpdateLevel(NewLevel);
 }
 
-void UABHUDWidget::UpdateExp(float NewExp)
+void UABHUDWidget::UpdateExp(float NewExp, float MaxEXP)
 {
-	CharacterExp->UpdateExpBar(NewExp);
+	CharacterExp->UpdateExpBar(NewExp, MaxEXP);
 }
 
 void UABHUDWidget::UpdateSkill(float CooldownPercent)

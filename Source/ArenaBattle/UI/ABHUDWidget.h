@@ -23,7 +23,7 @@ public:
 	void UpdateStat(const FABCharacterStat& BaseStat, const FABCharacterStat& ModifierStat);
 	void UpdateHpBar(float NewCurrentHp);
 	void UpdateLevel(float NewLevel);
-	void UpdateExp(float NewExp);
+	void UpdateExp(float NewExp, float MaxEXP);
 	void UpdateSkill(float CooldownPercent);
 
 protected:

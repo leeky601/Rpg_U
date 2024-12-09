@@ -11,7 +11,7 @@ struct FABCharacterStat : public FTableRowBase
 	GENERATED_BODY()
 
 	public:
-	FABCharacterStat() : MaxHp(0.0f), Attack(0.0f), AttackRange(0.0f), AttackSpeed(0.0f) {}
+	FABCharacterStat() : MaxHp(0.0f), Attack(0.0f), AttackRange(0.0f), AttackSpeed(0.0f), EXP(0.0f) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float MaxHp;
@@ -27,6 +27,9 @@ struct FABCharacterStat : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float MovementSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	float EXP;
 
 	FABCharacterStat operator+(const FABCharacterStat& Other) const
 	{

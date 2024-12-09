@@ -30,7 +30,7 @@ class ARENABATTLE_API AABStageGimmick : public AActor
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	// Sets default values for this actor's properties
 	AABStageGimmick();
 
@@ -93,6 +93,7 @@ protected:
 	void OnOpponentDestroyed(AActor* DestroyedActor);
 
 	FTimerHandle OpponentTimerHandle;
+
 	void OnOpponentSpawn();
 
 	// Reward Section

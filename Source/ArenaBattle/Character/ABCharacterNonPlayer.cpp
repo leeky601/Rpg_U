@@ -32,7 +32,7 @@ void AABCharacterNonPlayer::SetDead()
 {
 	Super::SetDead();
 
-	float GiveExp = Stat->GetMaxExp() / 4.0f;
+	float GiveExp = Stat->GetTotalStat().EXP / 1.0f;
 
 	AActor* GetPlayer = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AABCharacterBase* Player = Cast<AABCharacterBase>(GetPlayer);

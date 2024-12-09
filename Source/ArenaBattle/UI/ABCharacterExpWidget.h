@@ -21,14 +21,11 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	void UpdateExpBar(float NewExp);
+	void UpdateExpBar(float NewExp, float MaxEXP);
 
 protected:
 	UPROPERTY()
 	float CurrentExp;
-
-	UPROPERTY()
-	float MaxExp;
 
 	UPROPERTY()
 	TObjectPtr<class UProgressBar> ExpProgressBar;

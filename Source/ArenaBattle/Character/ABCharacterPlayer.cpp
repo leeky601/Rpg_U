@@ -250,7 +250,7 @@ void AABCharacterPlayer::SetupHUDWidget(UABHUDWidget* InHUDWidget)
 		InHUDWidget->UpdateStat(Stat->GetBaseStat(), Stat->GetModifierStat());
 		InHUDWidget->UpdateHpBar(Stat->GetCurrentHp());
 		InHUDWidget->UpdateLevel(GetLevel());
-		InHUDWidget->UpdateExp(Stat->GetCurrentExp());
+		InHUDWidget->UpdateExp(Stat->GetCurrentExp(), Stat->GetTotalStat().EXP);
 		InHUDWidget->UpdateSkill(Skill->GetCooldownPercent());
 
 		Stat->OnStatChanged.AddUObject(InHUDWidget, &UABHUDWidget::UpdateStat);
