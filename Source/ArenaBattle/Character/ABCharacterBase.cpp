@@ -40,7 +40,7 @@ AABCharacterBase::AABCharacterBase()
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
     GetCharacterMovement()->JumpZVelocity = 700.0f;
     GetCharacterMovement()->AirControl = 0.35f;
-    GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+    GetCharacterMovement()->MaxWalkSpeed = 600.0f;
     GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 

@@ -110,7 +110,7 @@ protected:
 	virtual void SetupCharacterWidget(class UABUserWidget* InUserWidget) override;
 
 	virtual void SetupInvenWidget(class UABInventoryWidget* InInventoryWidget) override;
-
+	
 	// Item Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment, Meta = (AllowPrivateAccess = "true"))
