@@ -10,8 +10,17 @@ public class ArenaBattle : ModuleRules
 
 		PublicIncludePaths.AddRange(new string[] { "ArenaBattle" });
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "NavigationSystem", "AIModule", "GameplayTasks", "Slate",
-    "SlateCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
+			"EnhancedInput",
+			"UMG",
+			"NavigationSystem",
+			"AIModule",
+			"GameplayTasks",
+			"Slate",
+		    "SlateCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
